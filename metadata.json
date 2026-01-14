@@ -1,0 +1,5 @@
+{
+  "name": "Sofverse CRM - Multi-Tenant Core",
+  "description": "A high-performance CRM architecture focusing on multi-tenancy, granular roles, and permission management for Super Admins and Company Admins.",
+  "requestFramePermissions": []
+}
