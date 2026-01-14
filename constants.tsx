@@ -2,27 +2,45 @@
 import { Permission, UserRole, Tenant, Role, User, Brand, Lead, LeadStatus, CallStatus, Project } from './types';
 
 export const SYSTEM_PERMISSIONS: Permission[] = [
-  { id: 'nav:dashboard', name: 'Show Dashboard Tab', category: 'Navigation', description: 'Visibility of dashboard' },
-  { id: 'nav:companies', name: 'Show Companies Tab', category: 'Navigation', description: 'Visibility of company management' },
-  { id: 'nav:users', name: 'Show Users Tab', category: 'Navigation', description: 'Visibility of user directory' },
-  { id: 'nav:roles', name: 'Show Roles Tab', category: 'Navigation', description: 'Visibility of roles & permissions' },
-  { id: 'nav:brands', name: 'Show Brands Tab', category: 'Navigation', description: 'Visibility of brands' },
-  { id: 'nav:leads', name: 'Show Leads Tab', category: 'Navigation', description: 'Visibility of leads' },
-  { id: 'nav:connections', name: 'Show Connections Tab', category: 'Navigation', description: 'Visibility of warm connections' },
-  { id: 'nav:clients', name: 'Show Clients Tab', category: 'Navigation', description: 'Visibility of the Client/Upsell module' },
-  { id: 'nav:projects', name: 'Show Projects Tab', category: 'Navigation', description: 'Access to operations Kanban' },
-  { id: 'nav:settings', name: 'Show Settings Tab', category: 'Navigation', description: 'Visibility of settings' },
-  { id: 'leads:read', name: 'View Leads', category: 'CRM', description: 'Access leads' },
-  { id: 'leads:create', name: 'Create Leads', category: 'CRM', description: 'Add leads' },
-  { id: 'leads:update', name: 'Update Leads', category: 'CRM', description: 'Modify lead info' },
-  { id: 'leads:assign', name: 'Assign Leads (Broad)', category: 'CRM', description: 'Assign to anyone' },
-  { id: 'leads:assign_team', name: 'Assign Leads (Team)', category: 'CRM', description: 'TL assignment rights' },
-  { id: 'leads:convert_client', name: 'Convert to Client', category: 'CRM', description: 'Permission to fill package form' },
-  { id: 'clients:read', name: 'View Clients', category: 'CRM', description: 'Access client list' },
-  { id: 'clients:upsell', name: 'Upsell Management', category: 'CRM', description: 'Can add upsell logs' },
-  { id: 'clients:assign_buh', name: 'BUH Assignment Rights', category: 'CRM', description: 'Assign clients to upsellers' },
-  { id: 'projects:manage', name: 'Manage Projects', category: 'Operations', description: 'Full drag/drop/edit control on Kanban' },
-  { id: 'projects:assign_pm', name: 'Assign Project Manager', category: 'Operations', description: 'Right to link PM to project' },
+  // Navigation
+  { id: 'nav:dashboard', name: 'Dashboard Access', category: 'Navigation', description: 'Grants access to the main dashboard and overview statistics.' },
+  { id: 'nav:companies', name: 'Companies Module', category: 'Navigation', description: 'Access to the global company/tenant management list.' },
+  { id: 'nav:users', name: 'User Directory', category: 'Navigation', description: 'Access to the user and personnel management directory.' },
+  { id: 'nav:roles', name: 'Roles & Rights', category: 'Navigation', description: 'Access to the roles and permission configuration panel.' },
+  { id: 'nav:brands', name: 'Brands Portfolio', category: 'Navigation', description: 'Access to the brand asset management module.' },
+  { id: 'nav:leads', name: 'Leads Pipeline', category: 'Navigation', description: 'Access to the primary lead acquisition pipeline.' },
+  { id: 'nav:connections', name: 'Warm Connections', category: 'Navigation', description: 'Access to the high-intent engagement module.' },
+  { id: 'nav:clients', name: 'Corporate Portfolio', category: 'Navigation', description: 'Access to post-closure client management.' },
+  { id: 'nav:projects', name: 'Operations Kanban', category: 'Navigation', description: 'Access to the delivery and project management board.' },
+  { id: 'nav:settings', name: 'Company Settings', category: 'Navigation', description: 'Access to white-labeling and company configurations.' },
+
+  // Lead Management
+  { id: 'leads:read', name: 'View Lead Data', category: 'CRM', description: 'View existing leads in the database.' },
+  { id: 'leads:create', name: 'Provision New Leads', category: 'CRM', description: 'Ability to manually add new leads to the system.' },
+  { id: 'leads:update', name: 'Modify Lead Nodes', category: 'CRM', description: 'Update contact info, status, and engagement context.' },
+  { id: 'leads:delete', name: 'Terminate Lead Nodes', category: 'CRM', description: 'Permanently remove leads from the system.' },
+  { id: 'leads:assign_team', name: 'Distribute Leads (TL)', category: 'CRM', description: 'Assign leads to specific sellers within the tenant.' },
+  { id: 'leads:convert_client', name: 'Authorize Conversion', category: 'CRM', description: 'Permission to promote a lead to a paying client.' },
+
+  // Client & Upsell Management
+  { id: 'clients:read', name: 'View Portfolio Assets', category: 'CRM', description: 'View the post-sale client database.' },
+  { id: 'clients:upsell', name: 'Post Success Logs', category: 'CRM', description: 'Ability to add strategy and interaction notes to clients.' },
+  { id: 'clients:finance', name: 'Update Financial Records', category: 'CRM', description: 'Add new sales or record payments against balances.' },
+  { id: 'clients:assign_buh', name: 'Account Assignment (BUH)', category: 'CRM', description: 'Assign account owners to specific clients.' },
+  { id: 'clients:delete', name: 'Archive Portfolio Assets', category: 'CRM', description: 'Remove clients from the active portfolio.' },
+
+  // Project Management
+  { id: 'projects:manage', name: 'Full Kanban Control', category: 'Operations', description: 'Create, edit, and move tasks across the delivery board.' },
+  { id: 'projects:assign_pm', name: 'Provision Project Leads', category: 'Operations', description: 'Assign Delivery Leads (PMs) to specific projects.' },
+  { id: 'projects:stages', name: 'Configure Board Stages', category: 'Operations', description: 'Add or remove columns from the Kanban board.' },
+  { id: 'projects:archive', name: 'Archive Projects', category: 'Operations', description: 'Close and archive completed delivery projects.' },
+
+  // Brand Management
+  { id: 'brands:manage', name: 'Asset Lifecycle Control', category: 'Brands', description: 'Add, edit, or suspend proprietary brand assets.' },
+  { id: 'brands:read', name: 'View Brand Registry', category: 'Brands', description: 'Visibility of active brands within the assigned scope.' },
+  
+  // Company Administration
+  { id: 'settings:white_label', name: 'Global White-Labeling', category: 'Company', description: 'Configure app names, colors, and branding overrides.' },
 ];
 
 export const INITIAL_TENANTS: Tenant[] = [
@@ -35,40 +53,40 @@ export const INITIAL_BRANDS: Brand[] = [
 ];
 
 export const INITIAL_ROLES: Role[] = [
-  { id: 'r-super-admin', name: 'Super Admin', description: 'Global master control', tenantId: null, permissions: SYSTEM_PERMISSIONS.map(p => p.id) },
-  { id: 'r-acme-admin', name: 'Company Admin', description: 'Full tenant control. Manages TLs and BUHs.', tenantId: 't1', permissions: SYSTEM_PERMISSIONS.filter(p => !p.id.includes('tenants')).map(p => p.id) },
+  { id: 'r-super-admin', name: 'Super Admin', description: 'Global master control with full system override capability.', tenantId: null, permissions: SYSTEM_PERMISSIONS.map(p => p.id) },
+  { id: 'r-acme-admin', name: 'Company Admin', description: 'Full tenant authority. Oversees TLs, BUHs, and all CRM pipelines.', tenantId: 't1', permissions: SYSTEM_PERMISSIONS.filter(p => !p.id.includes('companies')).map(p => p.id) },
   { 
     id: 'r-acme-tl', 
-    name: 'Front Seller Team Lead (TL)', 
-    description: 'Manages incoming leads and distributes to Front Sellers.', 
+    name: 'Front Team Lead', 
+    description: 'Directs the front seller unit and manages lead distribution.', 
     tenantId: 't1', 
     permissions: ['nav:dashboard', 'nav:brands', 'nav:leads', 'nav:connections', 'nav:clients', 'leads:read', 'leads:create', 'leads:update', 'leads:assign_team', 'leads:convert_client', 'clients:read', 'brands:read'] 
   },
   { 
     id: 'r-acme-seller', 
-    name: 'Simple Front Seller', 
-    description: 'Direct sales agent. Responsible for closing leads.', 
+    name: 'Front Seller', 
+    description: 'Responsible for closing leads and initiating client handovers.', 
     tenantId: 't1', 
-    permissions: ['nav:dashboard', 'nav:brands', 'nav:leads', 'nav:connections', 'nav:clients', 'leads:read', 'leads:create', 'leads:update', 'leads:convert_client', 'clients:read', 'brands:read'] 
+    permissions: ['nav:dashboard', 'nav:brands', 'nav:leads', 'nav:connections', 'leads:read', 'leads:create', 'leads:update', 'leads:convert_client', 'brands:read'] 
   },
   { 
     id: 'r-acme-buh', 
-    name: 'Business Unit Head (BUH)', 
-    description: 'Strategic head of the Client/Upsell unit. Assigns accounts to Upsellers.', 
+    name: 'Business Unit Head', 
+    description: 'Strategic head of the success unit. Manages upsells and delivery assignments.', 
     tenantId: 't1', 
-    permissions: ['nav:dashboard', 'nav:clients', 'nav:projects', 'clients:read', 'clients:upsell', 'clients:assign_buh', 'projects:manage', 'projects:assign_pm', 'brands:read'] 
+    permissions: ['nav:dashboard', 'nav:clients', 'nav:projects', 'clients:read', 'clients:upsell', 'clients:finance', 'clients:assign_buh', 'projects:manage', 'projects:assign_pm', 'projects:stages', 'brands:read'] 
   },
   { 
     id: 'r-acme-upseller', 
-    name: 'Simple Upseller', 
-    description: 'Account manager focused on growth and retention.', 
+    name: 'Account Growth Specialist', 
+    description: 'Dedicated to client retention, success metrics, and LTV growth.', 
     tenantId: 't1', 
-    permissions: ['nav:dashboard', 'nav:clients', 'nav:projects', 'clients:read', 'clients:upsell', 'projects:manage', 'projects:assign_pm', 'brands:read'] 
+    permissions: ['nav:dashboard', 'nav:clients', 'nav:projects', 'clients:read', 'clients:upsell', 'clients:finance', 'projects:manage', 'brands:read'] 
   },
   { 
     id: 'r-acme-pm', 
-    name: 'Project Manager (PM)', 
-    description: 'Operational delivery specialist. No access to financial or phone data.', 
+    name: 'Delivery Specialist', 
+    description: 'Technical lead for Kanban execution. No access to sensitive financial data.', 
     tenantId: 't1', 
     permissions: ['nav:dashboard', 'nav:projects', 'projects:manage', 'brands:read'] 
   }
@@ -98,7 +116,7 @@ export const INITIAL_LEADS: Lead[] = [
     lTag: 'Legendary',
     marketingEmailStatus: 'Sent',
     followupStatus: 'First Outreach',
-    sentFrom: 'Organic Search',
+    sentFrom: 'outreach@sofverse-marketing.com',
     timestamp: new Date().toISOString(),
     followupCount: 0,
     assignedTo: 'u3',
@@ -106,7 +124,7 @@ export const INITIAL_LEADS: Lead[] = [
     createdAt: '2024-03-24',
     isConnection: false,
     isClient: false,
-    comments: [{ id: 'c1', text: 'Lead ingested. High priority asset.', authorName: 'Sarah Admin', timestamp: '2024-03-24T10:00:00Z' }],
+    comments: [{ id: 'c1', text: 'Lead manually provisioned.', authorName: 'Sarah Admin', timestamp: '2024-03-24T10:00:00Z' }],
     upsellComments: []
   },
   {
@@ -122,7 +140,7 @@ export const INITIAL_LEADS: Lead[] = [
     lTag: 'Strategic',
     marketingEmailStatus: 'Opened',
     followupStatus: 'Drip Completed',
-    sentFrom: 'Direct Referral',
+    sentFrom: 'strategic-ops@sofverse.com',
     timestamp: new Date().toISOString(),
     followupCount: 5,
     assignedTo: 'u4',
@@ -133,12 +151,14 @@ export const INITIAL_LEADS: Lead[] = [
     isConnection: true,
     isClient: true,
     comments: [{ id: 'c4', text: 'Deal closed at 500k.', authorName: 'Sam Seller', timestamp: '2024-02-01T16:00:00Z' }],
-    upsellComments: [{ id: 'uc1', text: 'Account handed over.', authorName: 'Brenda BUH', timestamp: '2024-02-02T10:00:00Z' }],
+    upsellComments: [{ id: `uc-conv-${Date.now()}`, text: 'Initial conversion from Front Sales.', authorName: 'Sam Seller', timestamp: '2024-02-01T16:00:00Z' }],
     saleRecord: {
       packageTitle: 'Aerospace Ground Control Suite',
-      totalAmount: 500000,
-      items: [{ id: 'i1', name: 'Real-time Telemetry Node', amount: 300000 }, { id: 'i2', name: 'Field Hardware Kit x500', amount: 200000 }],
-      remainingBalance: 0,
+      basePrice: 500000,
+      amountPaid: 350000,
+      remainingBalance: 150000,
+      invoiceFile: 'INV-2024-AMZN.pdf',
+      contractFile: 'MSA-BLUE-ORIGIN.pdf',
       convertedDate: '2024-02-01T16:00:00Z'
     }
   }

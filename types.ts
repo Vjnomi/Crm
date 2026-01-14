@@ -66,9 +66,11 @@ export interface SaleItem {
 
 export interface SaleRecord {
   packageTitle: string;
-  totalAmount: number;
-  items: SaleItem[];
+  basePrice: number;
+  amountPaid: number;
   remainingBalance: number;
+  invoiceFile?: string;
+  contractFile?: string;
   convertedDate?: string;
 }
 
