@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout.tsx';
-import RoleSwitcher from './components/RoleSwitcher.tsx'; // NEW
+import RoleSwitcher from './components/RoleSwitcher.tsx';
 import TenantManagement from './pages/TenantManagement.tsx';
 import UserManagement from './pages/UserManagement.tsx';
 import RolesPermissions from './pages/RolesPermissions.tsx';
@@ -11,7 +11,7 @@ import LeadManagement from './pages/LeadManagement.tsx';
 import ConnectionsManagement from './pages/ConnectionsManagement.tsx';
 import ClientManagement from './pages/ClientManagement.tsx';
 import ProjectManagement from './pages/ProjectManagement.tsx';
-import { User, Tenant, Role, UserRole, Permission, Brand, Lead, Project } from './types.ts';
+import { User, Tenant, Role, UserRole, Permission, Brand, Lead, Project, AppSettings, AppTheme } from './types.ts';
 import { 
   INITIAL_TENANTS, 
   INITIAL_USERS, 
@@ -19,7 +19,8 @@ import {
   INITIAL_BRANDS,
   INITIAL_LEADS,
   INITIAL_PROJECTS,
-  SYSTEM_PERMISSIONS
+  SYSTEM_PERMISSIONS,
+  APP_THEMES
 } from './constants.tsx';
 
 export default function App() {
@@ -33,9 +34,11 @@ export default function App() {
   const [projects, setProjects] = useState<Project[]>(INITIAL_PROJECTS);
   const [permissions] = useState<Permission[]>(SYSTEM_PERMISSIONS);
   
-  const [globalSettings, setGlobalSettings] = useState({
+  const [globalSettings, setGlobalSettings] = useState<AppSettings>({
     globalAppName: 'Sofverse CRM',
-    globalPrimaryColor: '#7c3aed'
+    globalNavigationOrder: ['dashboard', 'tenants', 'users', 'roles', 'brands', 'leads', 'connections', 'clients', 'projects', 'settings'],
+    globalTheme: APP_THEMES[0],
+    isDarkMode: false
   });
 
   useEffect(() => {
@@ -62,7 +65,7 @@ export default function App() {
   const handleSwitchUser = (user: User) => {
     setCurrentUser(user);
     localStorage.setItem('sofverse_current_user', JSON.stringify(user));
-    setActiveTab('dashboard'); // Reset to dashboard for clean context
+    setActiveTab('dashboard');
   };
 
   const currentTenant = tenants.find(t => t.id === currentUser?.tenantId) || null;
@@ -87,10 +90,25 @@ export default function App() {
     setLeads(prev => prev.map(l => l.id === lead.id ? lead : l));
   };
 
+  const handleUpdateMultipleLeads = (updatedLeads: Lead[]) => {
+    setLeads(prev => {
+      const leadMap = new Map(updatedLeads.map(l => [l.id, l]));
+      return prev.map(l => leadMap.has(l.id) ? leadMap.get(l.id)! : l);
+    });
+  };
+
   const handleAddLead = (lead: Lead) => setLeads(prev => [...prev, lead]);
   const handleDeleteLead = (id: string) => {
     setLeads(prev => prev.filter(l => l.id !== id));
     setProjects(prev => prev.filter(p => p.clientId !== id));
+  };
+
+  const handleToggleDarkMode = () => {
+    if (currentTenant) {
+      setTenants(prev => prev.map(t => t.id === currentTenant.id ? { ...t, isDarkMode: !t.isDarkMode } : t));
+    } else {
+      setGlobalSettings(prev => ({ ...prev, isDarkMode: !prev.isDarkMode }));
+    }
   };
 
   const renderContent = () => {
@@ -105,11 +123,11 @@ export default function App() {
                 { label: 'Global Assets', value: leads.length.toString(), change: '+12', color: 'amber' },
                 { label: 'Portfolio Clients', value: leads.filter(l => l.isClient).length.toString(), change: 'Milestone', color: 'emerald' },
               ].map((stat, i) => (
-                <div key={i} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                  <p className="text-xs text-slate-500 font-black uppercase tracking-widest mb-2">{stat.label}</p>
+                <div key={i} className="theme-surface p-6 rounded-2xl shadow-sm border border-theme">
+                  <p className="text-[10px] theme-text-muted font-black uppercase tracking-widest mb-2">{stat.label}</p>
                   <div className="flex items-end justify-between">
-                    <h4 className="text-2xl font-black text-slate-800">{stat.value}</h4>
-                    <span className="text-[10px] font-black px-2 py-1 rounded bg-slate-100 text-slate-500 uppercase">{stat.change}</span>
+                    <h4 className="text-2xl font-black theme-text-main">{stat.value}</h4>
+                    <span className="text-[10px] font-black px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 theme-text-muted uppercase">{stat.change}</span>
                   </div>
                 </div>
               ))}
@@ -125,15 +143,15 @@ export default function App() {
       case 'brands':
         return <BrandManagement brands={brands} tenants={tenants} currentUser={currentUser!} currentUserRoleDetails={currentUserRoleDetails} onAddBrand={(b) => setBrands([...brands, b])} onUpdateBrand={(b) => setBrands(brands.map(it => it.id === b.id ? b : it))} onDeleteBrand={(id) => setBrands(brands.filter(b => b.id !== id))} />;
       case 'leads':
-        return <LeadManagement leads={leads} brands={brands} users={users} tenants={tenants} roles={roles} currentUser={currentUser!} onAddLead={handleAddLead} onUpdateLead={handleUpdateLead} onDeleteLead={handleDeleteLead} />;
+        return <LeadManagement leads={leads} brands={brands} users={users} tenants={tenants} roles={roles} currentUser={currentUser!} onAddLead={handleAddLead} onUpdateLead={handleUpdateLead} onDeleteLead={handleDeleteLead} onUpdateMultipleLeads={handleUpdateMultipleLeads} />;
       case 'connections':
-        return <ConnectionsManagement leads={leads} brands={brands} users={users} tenants={tenants} roles={roles} currentUser={currentUser!} onAddLead={handleAddLead} onUpdateLead={handleUpdateLead} onDeleteLead={handleDeleteLead} />;
+        return <ConnectionsManagement leads={leads} brands={brands} users={users} tenants={tenants} roles={roles} currentUser={currentUser!} onAddLead={handleAddLead} onUpdateLead={handleUpdateLead} onDeleteLead={handleDeleteLead} onUpdateMultipleLeads={handleUpdateMultipleLeads} />;
       case 'clients':
         return <ClientManagement leads={leads} users={users} brands={brands} roles={roles} currentUser={currentUser!} onUpdateLead={handleUpdateLead} />;
       case 'projects':
         return <ProjectManagement projects={projects} leads={leads} users={users} roles={roles} currentUser={currentUser!} onUpdateProject={(p) => setProjects(projects.map(it => it.id === p.id ? p : it))} />;
       case 'settings':
-        return <CompanySettings currentTenant={currentTenant} onUpdateTenant={(t) => setTenants(tenants.map(it => it.id === t.id ? t : it))} currentUser={currentUser!} globalSettings={globalSettings} onUpdateGlobalSettings={setGlobalSettings} />;
+        return <CompanySettings currentTenant={currentTenant} onUpdateTenant={(t) => setTenants(tenants.map(it => it.id === t.id ? t : it))} currentUser={currentUser!} globalSettings={globalSettings} onUpdateGlobalSettings={setGlobalSettings} onToggleDarkMode={handleToggleDarkMode} />;
       default:
         return null;
     }
@@ -149,6 +167,7 @@ export default function App() {
         activeTab={activeTab} 
         setActiveTab={setActiveTab}
         globalSettings={globalSettings}
+        onToggleDarkMode={handleToggleDarkMode}
       >
         <div className="max-w-[1600px] mx-auto">
           {renderContent()}

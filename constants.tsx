@@ -1,5 +1,56 @@
 
-import { Permission, UserRole, Tenant, Role, User, Brand, Lead, LeadStatus, CallStatus, Project } from './types';
+import { Permission, UserRole, Tenant, Role, User, Brand, Lead, LeadStatus, CallStatus, Project, AppTheme } from './types';
+
+export const APP_THEMES: AppTheme[] = [
+  {
+    id: 'theme-default',
+    name: 'Sofverse Violet',
+    primary: '#7c3aed',
+    secondary: '#0f172a',
+    accent: '#10b981',
+    bgApp: '#f8fafc',
+    bgSurface: '#ffffff',
+    textMain: '#0f172a',
+    textMuted: '#64748b',
+    border: '#e2e8f0'
+  },
+  {
+    id: 'theme-midnight',
+    name: 'Midnight Enterprise',
+    primary: '#3b82f6',
+    secondary: '#020617',
+    accent: '#8b5cf6',
+    bgApp: '#0f172a',
+    bgSurface: '#1e293b',
+    textMain: '#f8fafc',
+    textMuted: '#94a3b8',
+    border: '#334155'
+  },
+  {
+    id: 'theme-emerald',
+    name: 'Emerald Forest',
+    primary: '#059669',
+    secondary: '#064e3b',
+    accent: '#f59e0b',
+    bgApp: '#f0fdf4',
+    bgSurface: '#ffffff',
+    textMain: '#064e3b',
+    textMuted: '#6b7280',
+    border: '#d1fae5'
+  },
+  {
+    id: 'theme-nordic',
+    name: 'Nordic Frost',
+    primary: '#2dd4bf',
+    secondary: '#1e293b',
+    accent: '#f43f5e',
+    bgApp: '#f1f5f9',
+    bgSurface: '#ffffff',
+    textMain: '#334155',
+    textMuted: '#94a3b8',
+    border: '#e2e8f0'
+  }
+];
 
 export const SYSTEM_PERMISSIONS: Permission[] = [
   // Navigation

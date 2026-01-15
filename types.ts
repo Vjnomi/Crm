@@ -33,14 +33,29 @@ export interface Permission {
   description: string;
 }
 
+export interface AppTheme {
+  id: string;
+  name: string;
+  primary: string;
+  secondary: string;
+  accent: string;
+  bgApp: string;
+  bgSurface: string;
+  textMain: string;
+  textMuted: string;
+  border: string;
+}
+
 export interface Tenant {
   id: string;
   name: string;
   domain: string;
   status: 'Active' | 'Suspended';
   createdAt: string;
-  primaryColor?: string;
   customAppName?: string;
+  navigationOrder?: string[];
+  theme?: Partial<AppTheme>;
+  isDarkMode?: boolean;
 }
 
 export interface Brand {
@@ -56,12 +71,6 @@ export interface LeadComment {
   text: string;
   authorName: string;
   timestamp: string;
-}
-
-export interface SaleItem {
-  id: string;
-  name: string;
-  amount: number;
 }
 
 export interface SaleRecord {
@@ -85,13 +94,10 @@ export interface Lead {
   status: LeadStatus;
   callStatus: CallStatus;
   lTag: string;
-  
-  // Marketing Automation Fields
-  marketingEmailStatus: string; // E.g., 'Sent', 'Opened', 'Clicked'
-  followupStatus: string;       // E.g., 'First Followup', 'Drip Active'
-  sentFrom: string;             // Campaign Name or ID
-  timestamp: string;            // Last automation sync time
-  
+  marketingEmailStatus: string; 
+  followupStatus: string;       
+  sentFrom: string;             
+  timestamp: string;            
   followupCount: number;
   assignedTo: string | null;
   upsellAssignedTo?: string | null;
@@ -105,6 +111,21 @@ export interface Lead {
   saleRecord?: SaleRecord;
 }
 
+export interface Project {
+  id: string;
+  clientId: string;
+  tenantId: string;
+  columns: KanbanColumn[];
+  status: 'Active' | 'Paused' | 'Archived';
+  lastUpdated: string;
+}
+
+export interface KanbanColumn {
+  id: string;
+  title: string;
+  cards: TaskCard[];
+}
+
 export interface TaskCard {
   id: string;
   title: string;
@@ -114,21 +135,6 @@ export interface TaskCard {
   comments: LeadComment[];
   files: { name: string; size: string; type: string }[];
   createdAt: string;
-}
-
-export interface KanbanColumn {
-  id: string;
-  title: string;
-  cards: TaskCard[];
-}
-
-export interface Project {
-  id: string;
-  clientId: string;
-  tenantId: string;
-  columns: KanbanColumn[];
-  status: 'Active' | 'Paused' | 'Archived';
-  lastUpdated: string;
 }
 
 export interface Role {
@@ -154,5 +160,7 @@ export interface User {
 
 export interface AppSettings {
   globalAppName: string;
-  globalPrimaryColor: string;
+  globalNavigationOrder: string[];
+  globalTheme: AppTheme;
+  isDarkMode: boolean;
 }

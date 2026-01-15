@@ -13,6 +13,8 @@ interface ConnectionsManagementProps {
   onAddLead: (lead: Lead) => void;
   onUpdateLead: (lead: Lead) => void;
   onDeleteLead: (id: string) => void;
+  // Added missing onUpdateMultipleLeads property
+  onUpdateMultipleLeads?: (leads: Lead[]) => void;
 }
 
 const ConnectionsManagement: React.FC<ConnectionsManagementProps> = (props) => {
